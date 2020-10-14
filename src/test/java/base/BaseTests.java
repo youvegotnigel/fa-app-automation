@@ -47,7 +47,7 @@ public class BaseTests {
     public void recordFailure(ITestResult result){
         if(ITestResult.FAILURE == result.getStatus()){
             //cast the driver to "takes screenshot" class
-            var camera = (TakesScreenshot)driver;
+            TakesScreenshot camera = (TakesScreenshot)driver;
             File screenshot = camera.getScreenshotAs(OutputType.FILE);
             try {
                 Files.move(screenshot, new File("resources\\screenshots\\" + result.getName() + ".png"));

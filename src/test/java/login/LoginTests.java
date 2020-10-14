@@ -1,9 +1,9 @@
 package login;
 
 import base.BaseTests;
+import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import jdk.jfr.Description;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.HomePage;

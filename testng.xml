@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true"
+          name="C:/Essentials/TestAutomationUniversity/fa-app/src/test/java/login/LoginTests.java">
+        <classes>
+            <class name="login.LoginTests">
+                <methods>
+                    <include name="testSuccessfulLogin"/>
+                    <include name="verifyEmptyUsernameAndPassword"/>
+                    <include name="verifyIncorrectUsernameAndPassword"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
