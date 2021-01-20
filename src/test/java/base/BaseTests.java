@@ -4,6 +4,7 @@ import com.google.common.io.Files;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
@@ -11,7 +12,6 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import pages.LoginPage;
 import utills.CookieManager;
 import utills.EventReporter;
@@ -20,13 +20,15 @@ import utills.WindowManager;
 import java.io.File;
 import java.io.IOException;
 
-public class BaseTests {
+public class BaseTests extends DataForTests {
 
     private EventFiringWebDriver driver;
     protected LoginPage loginPage;
+    //create a thread driver
+    public static ThreadLocal<WebDriver> tdriver = new ThreadLocal<WebDriver>();
 
     @BeforeClass
-    public void setup() {
+    public WebDriver setup() {
         System.setProperty("webdriver.chrome.driver", "resources\\chromedriver.exe");
         driver = new EventFiringWebDriver(new ChromeDriver(getChromeOptions()));
         driver.register(new EventReporter());
@@ -34,12 +36,17 @@ public class BaseTests {
         //driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         goHome();
         //setCookie();
+
+        //initialize the driver to create a tread
+        tdriver.set(driver);
+        return getDriver();
     }
 
-    @BeforeMethod
+
     public void goHome(){
         driver.get("https://oneapp.ncinga.com/ba-app/#");
-        driver.manage().window().maximize();
+        //driver.get("https://nint-service-external.strawmine.com/ba-app/#");
+        //driver.manage().window().maximize();
         loginPage = new LoginPage(driver);
     }
 
@@ -74,13 +81,22 @@ public class BaseTests {
         return options;
     }
 
+    public void refreshBrowser(){
+        driver.navigate().refresh();
+    }
+
     private void setCookie(){
-        Cookie cookie = new Cookie.Builder("name","123").domain("the-internet.herokuapp.com").build();
-        driver.manage().addCookie(cookie);
+        //Cookie cookie = new Cookie.Builder("name","123").domain("the-internet.herokuapp.com").build();
+        //driver.manage().addCookie(cookie);
 
     }
 
     public utills.CookieManager getCookieManager(){
         return new CookieManager(driver);
+    }
+
+    //pass the driver in thread
+    public static synchronized WebDriver getDriver() {
+        return tdriver.get();
     }
 }
